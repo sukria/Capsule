@@ -14,6 +14,8 @@ BUILDDIR=$(mktemp -d "/tmp/${CAPSULE_PROJECT}-autobuild.XXXXXX")
 
 function on_exit() {
 	exit_code=$?
+	rm -rf $BUILDDIR
+
     if [[ $exit_code -gt 0 ]]; then
 
 		if [[ $exit_code == $LOCK_FILE_IS_FOUND ]]; then
@@ -22,12 +24,10 @@ function on_exit() {
 	        echo "FAILURE during processing of $project @'$branch'" >&2
 	        mv $logfile $logfile.failed
 			rm -f $LOCKFILE
-			rm -rf $BUILDDIR
 		fi
     else
 		echo "All builds done with success"
 		rm -f $LOCKFILE
-		rm -rf $BUILDDIR
     fi
 }
 
